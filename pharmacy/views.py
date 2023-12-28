@@ -240,9 +240,83 @@ def decrease_cart(request, pk):
         messages.error(request, 'Not Authorized')
         return render(request, 'patient-login.html') 
     
+# --------------------------------------------->algorithm for cosine sin 
+# import torch
+# from PIL import Image
+# from torchvision import transforms
+# import json
+# from .models import Product, FeatureVector
+
+# # Function to extract features from an image using a pre-trained model
+# def extract_features_from_image(image_path):
+#     image = Image.open(image_path).convert("RGB")
+#     transform = transforms.Compose([
+#         transforms.Resize((224, 224)),
+#         transforms.ToTensor(),
+#         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+#     ])
+#     image = transform(image).unsqueeze(0)
+
+#     model = torch.hub.load("pytorch/vision", "resnet18", pretrained=True)
+#     model.eval()
+
+#     with torch.no_grad():
+#         features = model(image).squeeze().numpy().tolist()
+
+#     return features
+
+# # Function to create feature vectors for products
+# def create_feature_vectors():
+#     products = Product.objects.all()
+
+#     for product in products:
+#         # Check if a feature vector already exists for the product
+#         if FeatureVector.objects.filter(product=product).exists():
+#             continue
+
+#         # Extract features from the product's image
+#         feature_vector = extract_features_from_image(product.image.D:\All abot project\cProject\HealthStack-System\static\images\medicines)
+
+#         # Create or update the feature vector for the product
+#         feature_vector_obj, created = FeatureVector.objects.get_or_create(
+#             product=product, defaults={"feature_vector": json.dumps(feature_vector)}
+#         )
+
+#         # Save the feature vector object
+#         feature_vector_obj.save()
+
+# # Call the function to create feature vectors for products
+# create_feature_vectors()
 
 
-#     def extract_features_from_image(image_path):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+#     def extract_features_from_image(image_D:\All abot project\cProject\HealthStack-System\static\images\medicines):
     
 #     image = Image.open(image_path).convert("RGB")
 #     transform = transforms.Compose(
@@ -275,7 +349,7 @@ def decrease_cart(request, pk):
 #             continue  
 
    
-#         feature_vector = extract_features_from_image(product.image.path)
+#         feature_vector = extract_features_from_image(product.image.D:\All abot project\cProject\HealthStack-System\static\images\medicines)
 
      
 #         feature_vector_obj, created = FeatureVector.objects.get_or_create(

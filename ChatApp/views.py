@@ -182,6 +182,87 @@ def send_chat(request):
 
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
+# spam checker
+
+# def send_chat(request):
+#     resp = {}
+#     User = get_user_model()
+#     if request.method == 'POST':
+#         post = request.POST
+
+#         u_from = User.objects.get(id=post['user_from'])
+#         u_to = User.objects.get(id=post['user_to'])
+#         message = post['message']
+
+#         # Load the SMS spam dataset from a file
+#         with open('spam.txt', 'r') as file:
+#             spam_keywords = [line.strip() for line in file]
+
+#         # Check for spam using the loaded dataset
+#         is_spam = any(keyword in message for keyword in spam_keywords)
+
+#         if is_spam:
+#             resp['status'] = 'failed'
+#             resp['mesg'] = 'Message identified as spam.'
+#         else:
+#             insert = chatMessages(user_from=u_from, user_to=u_to, message=message)
+#             try:
+#                 insert.save()
+#                 resp['status'] = 'success'
+#             except Exception as ex:
+#                 resp['status'] = 'failed'
+#                 resp['mesg'] = ex
+#     else:
+#         resp['status'] = 'failed'
+
+#     return HttpResponse(json.dumps(resp), content_type="application/json")
+
+#--------------------------------------------------------------------------->
+
+import re  # Add this import for regular expressions
+
+# Define a list of spam keywords (you can add more as needed)
+spam_keywords = [
+    'spam_keyword1',
+    'spam_keyword2',
+    'spam_keyword3',
+    # Add more keywords here
+]
+
+# Create a regular expression pattern to match any of the spam keywords
+spam_pattern = re.compile('|'.join(map(re.escape, spam_keywords)), re.IGNORECASE)
+
+@csrf_exempt
+@login_required(login_url='login')
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def send_chat(request):
+    resp = {}
+    User = get_user_model()
+    if request.method == 'POST':
+        post = request.POST
+
+        u_from = User.objects.get(id=post['user_from'])
+        u_to = User.objects.get(id=post['user_to'])
+        message = post['message']
+
+        # Check for spam using the loaded dataset
+        is_spam = bool(spam_pattern.search(message))
+
+        if is_spam:
+            resp['status'] = 'failed'
+            resp['mesg'] = 'Message identified as spam.'
+        else:
+            insert = chatMessages(user_from=u_from, user_to=u_to, message=message)
+            try:
+                insert.save()
+                resp['status'] = 'success'
+            except Exception as ex:
+                resp['status'] = 'failed'
+                resp['mesg'] = ex
+    else:
+        resp['status'] = 'failed'
+
+    return HttpResponse(json.dumps(resp), content_type="application/json")
 
 
 

@@ -224,7 +224,7 @@ def accept_appointment(request, pk):
     plain_message = strip_tags(html_message)
     
     try:
-        send_mail(subject, plain_message, 'hospital_admin@gmail.com',  [patient_email], html_message=html_message, fail_silently=False)
+        send_mail(subject, plain_message, 'hospital_milangiri666@gmail.com',  [patient_email], html_message=html_message, fail_silently=False)
     except BadHeaderError:
         return HttpResponse('Invalid header found')
     
@@ -589,18 +589,41 @@ def report_pdf(request, pk):
 
 @csrf_exempt
 @login_required(login_url="login")
+# if invalid serch then this code redirect you in login page 
 def patient_search(request, pk):
     if request.user.is_authenticated and request.user.is_doctor:
         doctor = Doctor_Information.objects.get(doctor_id=pk)
-        id = int(request.GET['search_query'])
-        patient = Patient.objects.get(patient_id=id)
-        prescription = Prescription.objects.filter(doctor=doctor).filter(patient=patient)
-        context = {'patient': patient, 'doctor': doctor, 'prescription': prescription}
-        return render(request, 'patient-profile.html', context)
+        search_query = request.GET.get('search_query')
+
+        try:
+            id = int(search_query)
+            try:
+                patient = Patient.objects.get(patient_id=id)
+                prescription = Prescription.objects.filter(doctor=doctor, patient=patient)
+                context = {'patient': patient, 'doctor': doctor, 'prescription': prescription}
+                return render(request, 'patient-profile.html', context)
+            except Patient.DoesNotExist:
+                messages.info(request, 'Patient not found')
+                return render(request, 'doctor-login.html')
+        except ValueError:
+            messages.info(request, 'Invalid patient ID')
+            return render(request, 'doctor-login.html')
     else:
         logout(request)
         messages.info(request, 'Not Authorized')
         return render(request, 'doctor-login.html')
+# def patient_search(request, pk):
+#     if request.user.is_authenticated and request.user.is_doctor:
+#         doctor = Doctor_Information.objects.get(doctor_id=pk)
+#         id = int(request.GET['search_query'])
+#         patient = Patient.objects.get(patient_id=id)
+#         prescription = Prescription.objects.filter(doctor=doctor).filter(patient=patient)
+#         context = {'patient': patient, 'doctor': doctor, 'prescription': prescription}
+#         return render(request, 'patient-profile.html', context)
+#     else:
+#         logout(request)
+#         messages.info(request, 'Not Authorized')
+#         return render(request, 'doctor-login.html')
 
 @csrf_exempt
 @login_required(login_url="login")

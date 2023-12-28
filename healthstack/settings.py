@@ -108,6 +108,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        
     }
 }
 
@@ -136,7 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Dhaka'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
@@ -154,6 +155,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+# settings.py
+
+
+
+# stripe ------------------------------------->
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51NSvk2JME8kW2R5KxJ0lZuygJ6kRAXbVfVT3Bl4ik9stYGrF2LLziBoJQ2o1bScl7JGv85r5tXLSxoJi6Q2PaWXT00icCrvjTW'
+STRIPE_SECRET_KEY = 'sk_test_51NSvk2JME8kW2R5KbvcGRjAMi2MPHEr5QsjJnx5s7FpN2dGYGDPR1PTfyHDaWD9EGfUEjeNgNc9XRxrYyrPed2U300RZYaO0RH'
+
 
 ### SSLCOMMERZ env variables
 #VARIABLE should be in capital letter.
